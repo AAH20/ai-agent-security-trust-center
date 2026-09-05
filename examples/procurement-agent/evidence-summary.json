@@ -1,0 +1,8 @@
+{
+  "fixture": true,
+  "test_run": "reference-001",
+  "tests": 12,
+  "passed": 11,
+  "not_tested": ["cross-tenant isolation"],
+  "claim_boundary": "Synthetic evidence used to demonstrate bundle integrity and rendering only"
+}

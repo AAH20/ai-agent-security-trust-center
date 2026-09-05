@@ -1,0 +1,21 @@
+name: Trust Center Verification
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -e .
+      - run: python -m unittest discover -s tests -v
+      - run: agent-trust validate examples/procurement-agent/agent-assurance.json
+      - run: agent-trust score examples/procurement-agent/agent-assurance.json
+      - run: agent-trust bundle examples/procurement-agent/agent-assurance.json --evidence examples/procurement-agent/evidence-summary.json --output /tmp/agent-assurance-bundle.json
+      - run: agent-trust verify /tmp/agent-assurance-bundle.json --source-dir examples/procurement-agent
+      - run: agent-trust render examples/procurement-agent/agent-assurance.json --output /tmp/trust-center/index.html

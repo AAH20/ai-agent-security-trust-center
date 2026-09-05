@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "agent_id": "urn:agent:example:procurement-assistant",
+  "name": "Example Procurement Assistant",
+  "version": "0.3.0",
+  "owner": {"name": "Example Security Engineering", "contact": "security@example.invalid"},
+  "purpose": "Synthetic reference agent that summarizes vendor evidence and prepares a review record for human approval.",
+  "autonomy_level": 3,
+  "tools": [
+    {"name": "vendor-document-store", "kind": "api", "access": "read", "approval_required": false},
+    {"name": "risk-register", "kind": "mcp", "access": "write", "approval_required": true}
+  ],
+  "data_classes": ["internal", "confidential"],
+  "authorization": {"identity": "short-lived workload identity", "default": "deny", "maximum_session_minutes": 30},
+  "limitations": [
+    "Synthetic profile; no enterprise deployment claim",
+    "Cannot approve vendors or accept risk",
+    "External evidence requires independent verification"
+  ],
+  "framework_mappings": [
+    {"framework": "NIST AI RMF", "reference": "GOVERN, MAP, MEASURE, MANAGE", "status": "DOCUMENTED"},
+    {"framework": "OWASP Top 10 for Agentic Applications 2026", "reference": "test pack pending", "status": "PARTIAL"}
+  ],
+  "assurance": {
+    "status": "REVIEW_REQUIRED",
+    "valid_until": "2027-01-01T00:00:00Z",
+    "scores": {
+      "identity_authorization": 82,
+      "tool_data_security": 78,
+      "adversarial_resilience": 65,
+      "operational_reliability": 76,
+      "governance_evidence": 85
+    },
+    "mandatory_gates": {
+      "approval_enforcement": "PASS",
+      "cross_tenant_isolation": "NOT_TESTED",
+      "audit_log_completeness": "PASS",
+      "rollback_or_safe_failure": "PASS"
+    }
+  }
+}

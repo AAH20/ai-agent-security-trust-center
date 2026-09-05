@@ -1,0 +1,38 @@
+name: AI Agent Security Trust Center
+description: Validate an AI agent assurance profile and generate a tamper-evident evidence manifest
+branding:
+  icon: shield
+  color: blue
+inputs:
+  profile:
+    description: Path to agent-assurance.json
+    required: true
+    default: agent-assurance.json
+  evidence:
+    description: Optional path to one evidence summary
+    required: false
+    default: ""
+  output:
+    description: Output evidence bundle path
+    required: false
+    default: agent-assurance-bundle.json
+runs:
+  using: composite
+  steps:
+    - name: Install local trust-center CLI
+      shell: bash
+      run: python -m pip install "${{ github.action_path }}"
+    - name: Validate assurance profile
+      shell: bash
+      run: agent-trust validate "${{ inputs.profile }}"
+    - name: Enforce effective assurance status
+      shell: bash
+      run: agent-trust score "${{ inputs.profile }}"
+    - name: Build profile-only evidence bundle
+      if: inputs.evidence == ''
+      shell: bash
+      run: agent-trust bundle "${{ inputs.profile }}" --output "${{ inputs.output }}"
+    - name: Build evidence bundle
+      if: inputs.evidence != ''
+      shell: bash
+      run: agent-trust bundle "${{ inputs.profile }}" --evidence "${{ inputs.evidence }}" --output "${{ inputs.output }}"

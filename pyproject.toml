@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-agent-security-trust-center"
+version = "0.1.0"
+description = "Open security assurance registry for AI agents, MCP servers, tools, and autonomous workflows"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+keywords = ["ai agent security", "mcp security", "ai governance", "ai compliance", "agent identity", "agent authorization", "trust center"]
+
+[project.scripts]
+agent-trust = "agent_trust.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

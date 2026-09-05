@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://a2zsoc.com/schemas/agent-assurance/v1.json",
+  "title": "AI Agent Security Assurance Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "agent_id", "name", "version", "owner", "purpose", "autonomy_level", "tools", "data_classes", "authorization", "assurance"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "agent_id": {"type": "string", "pattern": "^urn:agent:"},
+    "name": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "owner": {"type": "object", "required": ["name", "contact"], "properties": {"name": {"type": "string"}, "contact": {"type": "string"}}},
+    "purpose": {"type": "string", "minLength": 1},
+    "autonomy_level": {"type": "integer", "minimum": 0, "maximum": 5},
+    "tools": {"type": "array", "items": {"type": "object", "required": ["name", "access"], "properties": {"name": {"type": "string"}, "kind": {"type": "string"}, "access": {"enum": ["read", "write", "execute", "admin"]}, "approval_required": {"type": "boolean"}}}},
+    "data_classes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "authorization": {"type": "object"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "framework_mappings": {"type": "array", "items": {"type": "object"}},
+    "assurance": {
+      "type": "object",
+      "required": ["status", "scores", "mandatory_gates"],
+      "properties": {
+        "status": {"enum": ["VERIFIED", "REVIEW_REQUIRED", "RESTRICTED", "EXPIRED"]},
+        "valid_until": {"type": "string", "format": "date-time"},
+        "scores": {
+          "type": "object",
+          "required": ["identity_authorization", "tool_data_security", "adversarial_resilience", "operational_reliability", "governance_evidence"],
+          "additionalProperties": false,
+          "properties": {
+            "identity_authorization": {"type": "number", "minimum": 0, "maximum": 100},
+            "tool_data_security": {"type": "number", "minimum": 0, "maximum": 100},
+            "adversarial_resilience": {"type": "number", "minimum": 0, "maximum": 100},
+            "operational_reliability": {"type": "number", "minimum": 0, "maximum": 100},
+            "governance_evidence": {"type": "number", "minimum": 0, "maximum": 100}
+          }
+        },
+        "mandatory_gates": {
+          "type": "object",
+          "required": ["approval_enforcement", "cross_tenant_isolation", "audit_log_completeness", "rollback_or_safe_failure"],
+          "additionalProperties": false,
+          "properties": {
+            "approval_enforcement": {"enum": ["PASS", "FAIL", "NOT_TESTED"]},
+            "cross_tenant_isolation": {"enum": ["PASS", "FAIL", "NOT_TESTED"]},
+            "audit_log_completeness": {"enum": ["PASS", "FAIL", "NOT_TESTED"]},
+            "rollback_or_safe_failure": {"enum": ["PASS", "FAIL", "NOT_TESTED"]}
+          }
+        }
+      }
+    }
+  }
+}
